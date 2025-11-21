@@ -1,0 +1,33 @@
+workflows:
+  humai_react_native:
+    name: HumAI Digital Twin - React Native
+    max_build_duration: 60
+
+    environment:
+      node: 18
+      yarn: true
+      # ovdje kasnije možeš dodati varijable tipa HUMAI_API_URL
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install || npm install
+
+      - name: Run tests
+        script: |
+          yarn test || echo "No tests yet"
+
+      - name: Build Android release
+        script: |
+          cd android
+          ./gradlew assembleRelease
+
+    artifacts:
+      - android/app/build/outputs/**/*.apk
